@@ -254,68 +254,57 @@ document.addEventListener("DOMContentLoaded", function () {
 
 //Tab Injection
 document.addEventListener("DOMContentLoaded", function () {
-  console.log("DOM loaded, starting clone operation");
-
   // Find wrapper element
   const wrapper = document.querySelector('[data-clone-source="wrap"]');
   if (!wrapper) {
-    console.log("Wrapper element not found, returning");
+    console.warn("Wrapper element not found, returning");
     return;
   }
-  console.log("Wrapper found:", wrapper);
 
   // Find source elements inside wrapper
   const sourceLink = wrapper.querySelector('[data-clone-source="link"]');
   const sourcePane = wrapper.querySelector('[data-clone-source="pane"]');
 
   if (!sourceLink) {
-    console.log("Source link element not found, returning");
+    console.warn("Source link element not found, returning");
     return;
   }
   if (!sourcePane) {
-    console.log("Source pane element not found, returning");
+    console.warn("Source pane element not found, returning");
     return;
   }
-  console.log("Source elements found - link:", sourceLink, "pane:", sourcePane);
 
   // Find ALL target elements
   const targetLinks = document.querySelectorAll('[data-clone-target="link"]');
   const targetPanes = document.querySelectorAll('[data-clone-target="pane"]');
 
   if (targetLinks.length === 0) {
-    console.log("No target link elements found, returning");
+    console.warn("No target link elements found, returning");
     return;
   }
   if (targetPanes.length === 0) {
-    console.log("No target pane elements found, returning");
+    console.warn("No target pane elements found, returning");
     return;
   }
-  console.log(
-    `Found ${targetLinks.length} target links and ${targetPanes.length} target panes`,
-  );
 
   // Clone source link to all target links
   targetLinks.forEach((targetLink, index) => {
     const clonedLink = sourceLink.cloneNode(true);
     targetLink.appendChild(clonedLink);
-    console.log(`Cloned source link to target link ${index + 1}`);
   });
 
   // Clone source pane to all target panes
   targetPanes.forEach((targetPane, index) => {
     const clonedPane = sourcePane.cloneNode(true);
     targetPane.appendChild(clonedPane);
-    console.log(`Cloned source pane to target pane ${index + 1}`);
   });
 
   // Delete wrapper
   wrapper.remove();
-  console.log("Clone operation complete, wrapper deleted");
 });
 
 //OS Detection
 document.addEventListener("DOMContentLoaded", function () {
-  console.log("OS detection started");
   // Inject CSS styles
   const styles = `
         .c-navbar_download { display: none; }
@@ -333,16 +322,16 @@ document.addEventListener("DOMContentLoaded", function () {
   // OS detection
   if (/iphone|ipad|ipod/.test(userAgent)) {
     osClass = "ios";
-    console.log("iOS detected");
+    console.log("Download Links: iOS detected");
   } else if (/android/.test(userAgent)) {
     osClass = "android";
-    console.log("Android detected");
+    console.log("Download Links: Android detected");
   } else if (/windows/.test(userAgent)) {
     osClass = "windows";
-    console.log("Windows detected");
+    console.log("Download Links: Windows detected");
   } else if (/mac/.test(userAgent)) {
     osClass = "macos";
-    console.log("macOS detected");
+    console.log("Download Links: macOS detected");
   }
   // Add class to body
   document.body.classList.add(osClass);
@@ -357,7 +346,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // Find all elements with data-download-link attribute
   const downloadLinks = document.querySelectorAll("[data-download-link]");
-  console.log("Found download links:", downloadLinks.length);
 
   downloadLinks.forEach((link) => {
     const os = link.getAttribute("data-download-os");
@@ -366,7 +354,6 @@ document.addEventListener("DOMContentLoaded", function () {
     if (os && name && osNames[os]) {
       const newText = `Download ${name} for ${osNames[os]}`;
       link.textContent = newText;
-      console.log("Updated link text:", newText);
     } else {
       console.warn("Missing or invalid attributes on link:", link);
     }

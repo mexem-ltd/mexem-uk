@@ -22,7 +22,6 @@ document.addEventListener("DOMContentLoaded", function () {
   if (window.innerWidth > 991) {
     return;
   }
-  console.log("Mobile navigation initialized");
 
   const toggles = document.querySelectorAll('[data-nav-dd="toggle"]');
   const openButtons = document.querySelectorAll("[data-dd-open]");
@@ -31,35 +30,29 @@ document.addEventListener("DOMContentLoaded", function () {
   let activeToggle = null;
 
   function hideAllDropdowns() {
-    console.log("Hiding all dropdowns");
     toggles.forEach((toggle) => {
       const drawer = toggle.nextElementSibling;
       if (drawer && drawer.getAttribute("data-nav-dd") === "drawer") {
         toggle.setAttribute("data-dd-state", "hide");
-        console.log("Drawer hidden");
       }
     });
     activeToggle = null;
   }
 
   function showDropdown(toggle, drawer) {
-    console.log("Showing dropdown");
     if (activeToggle && activeToggle !== toggle) {
       hideAllDropdowns();
     }
 
     activeToggle = toggle;
     toggle.setAttribute("data-dd-state", "show");
-    console.log("Drawer shown");
   }
 
   function hideDropdown(toggle, drawer) {
-    console.log("Hiding dropdown");
     toggle.setAttribute("data-dd-state", "hide");
     if (activeToggle === toggle) {
       activeToggle = null;
     }
-    console.log("Drawer hidden");
   }
 
   // Open button click handlers
@@ -72,7 +65,6 @@ document.addEventListener("DOMContentLoaded", function () {
       const drawer = toggle.nextElementSibling;
       if (drawer && drawer.getAttribute("data-nav-dd") === "drawer") {
         openButton.addEventListener("click", () => {
-          console.log("Open button clicked");
           const currentState = toggle.getAttribute("data-dd-state");
           if (currentState === "show") {
             hideDropdown(toggle, drawer);
@@ -87,7 +79,6 @@ document.addEventListener("DOMContentLoaded", function () {
   // Back button handlers
   backButtons.forEach((backButton) => {
     backButton.addEventListener("click", () => {
-      console.log("Back button clicked");
       // Traverse up to find parent toggle
       let parentToggle = backButton.closest('[data-nav-dd="drawer"]');
       if (parentToggle) {
@@ -98,7 +89,6 @@ document.addEventListener("DOMContentLoaded", function () {
         ) {
           const drawer = parentToggle.nextElementSibling;
           hideDropdown(parentToggle, drawer);
-          console.log("Parent toggle found and drawer closed");
         }
       }
     });
@@ -107,13 +97,11 @@ document.addEventListener("DOMContentLoaded", function () {
   // Menu click handler
   if (menu) {
     menu.addEventListener("click", () => {
-      console.log("Menu clicked");
       if (activeToggle) {
         const currentState = activeToggle.getAttribute("data-dd-state");
         if (currentState === "show") {
           const drawer = activeToggle.nextElementSibling;
           hideDropdown(activeToggle, drawer);
-          console.log("Active drawer closed via menu click");
         }
       }
     });
@@ -281,12 +269,10 @@ document.addEventListener("DOMContentLoaded", function () {
   };
 
   window.openFirstAccordion = function () {
-    console.log("Opening first accordion in each component");
     const components = document.querySelectorAll("[data-acc-component]");
     components.forEach((component) => {
       const firstToggle = component.querySelector("[data-acc-toggle]");
       if (firstToggle) {
-        console.log("Opening first toggle in component:", component);
         openAccordion(firstToggle);
       }
     });
@@ -324,7 +310,6 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   function closeAllOtherAccordions(currentToggle) {
-    console.log("Closing other accordions in same component");
     // Find the parent component of the current toggle
     const parentComponent = currentToggle.closest("[data-acc-component]");
     if (parentComponent) {
@@ -549,7 +534,7 @@ document.addEventListener("DOMContentLoaded", function () {
               }
             }, 50);
           } else {
-            console.log(
+            console.warn(
               `ERROR: No pane ${clickedIndex} found in ${type}/${name}`,
             );
           }

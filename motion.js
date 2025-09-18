@@ -151,8 +151,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Initializers
   function initChapterAnimations() {
-    console.log("Initializing chapter animations");
-
     // Check if GSAP and ScrollTrigger are available
     if (!window.gsap) {
       console.error("GSAP not found. Please ensure it is loaded.");
@@ -178,9 +176,6 @@ document.addEventListener("DOMContentLoaded", () => {
       `${config.selectors.image.container} ${config.selectors.image.items}`,
     );
 
-    console.log("Chapter items found:", chapterItems.length);
-    console.log("Image items found:", imageItems.length);
-
     // Validate DOM elements
     if (!chapterItems.length || !imageItems.length) {
       console.warn("Image sequence not found");
@@ -195,8 +190,6 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function initImageStates(items) {
-    console.log("Initializing image states");
-
     // On mobile, show all images
     if (window.innerWidth <= 991) {
       gsap.set(items, { opacity: 1, force3D: config.animation.force3D });
@@ -209,11 +202,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function createImageScrollBatch(chapterItems, imageItems) {
     if (window.innerWidth <= 991) {
-      console.log("Mobile detected - skipping batch triggers");
+      console.warn("Mobile detected - skipping batch triggers");
       return;
     }
 
-    console.log("Creating batch scroll triggers");
     const lastIndex = chapterItems.length;
 
     // Batch for entering (scrolling down)
@@ -222,14 +214,12 @@ document.addEventListener("DOMContentLoaded", () => {
       onEnter: (elements) => {
         elements.forEach((element, idx) => {
           const currentIndex = Array.from(chapterItems).indexOf(element) + 1;
-          console.log("Batch enter triggered for index:", currentIndex);
           handleItemEnter(currentIndex, lastIndex, imageItems);
         });
       },
       onLeaveBack: (elements) => {
         elements.forEach((element, idx) => {
           const currentIndex = Array.from(chapterItems).indexOf(element) + 1;
-          console.log("Batch leave back triggered for index:", currentIndex);
           handleItemLeaveBack(currentIndex, lastIndex, imageItems);
         });
       },
@@ -240,8 +230,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function handleItemEnter(currentIndex, lastIndex, items) {
     if (currentIndex <= 1) return;
-
-    console.log("Handling enter for index:", currentIndex);
 
     // Create and play transition animation
     const timeline = createTransitionTimeline(
@@ -254,11 +242,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function handleItemLeaveBack(currentIndex, lastIndex, items) {
     if (currentIndex <= 1) {
-      console.log("Skipping leave back for first chapter");
       return;
     }
-
-    console.log("Handling leave back for index:", currentIndex);
 
     // Create and play transition animation (reverse direction)
     const timeline = createTransitionTimeline(
@@ -270,8 +255,6 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function createTransitionTimeline(fadeOutItem, fadeInItem) {
-    console.log("Creating transition timeline");
-
     const tl = gsap.timeline();
 
     tl.to(fadeOutItem, {
@@ -300,7 +283,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Cleanup function for SPA environments
   function cleanup() {
-    console.log("Cleaning up ScrollTriggers");
     ScrollTrigger.killAll();
   }
 
@@ -311,9 +293,6 @@ document.addEventListener("DOMContentLoaded", () => {
 //GSAP for Text Reveal
 document.addEventListener("DOMContentLoaded", function () {
   // Debug: Check what's actually available
-  console.log("GSAP available:", typeof gsap !== "undefined");
-  console.log("ScrollTrigger available:", typeof ScrollTrigger !== "undefined");
-  console.log("SplitText available:", typeof SplitText !== "undefined");
 
   // More detailed check
   if (typeof gsap !== "undefined") {
@@ -325,7 +304,7 @@ document.addEventListener("DOMContentLoaded", function () {
   if (typeof SplitText !== "undefined") {
     console.log("SplitText loaded");
   } else {
-    console.error("SplitText is not available");
+    console.warn("SplitText is not available");
   }
 
   // Make sure GSAP and plugins are loaded
@@ -334,7 +313,7 @@ document.addEventListener("DOMContentLoaded", function () {
     typeof ScrollTrigger === "undefined" ||
     typeof SplitText === "undefined"
   ) {
-    console.error(
+    console.warn(
       "Required libraries (GSAP, ScrollTrigger, or SplitText) are not loaded",
     );
     return;
@@ -342,8 +321,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // Register ScrollTrigger and SplitText plugins with GSAP
   gsap.registerPlugin(ScrollTrigger, SplitText);
-
-  console.log("GSAP SplitText animation initializing...");
 
   // Wait a moment to ensure the DOM is fully processed
   setTimeout(() => {
@@ -356,13 +333,9 @@ document.addEventListener("DOMContentLoaded", function () {
       return;
     }
 
-    console.log(`Found ${textElements.length} text elements to animate`);
-
     // Process each element
     textElements.forEach((textElement, elementIndex) => {
       try {
-        console.log(`Processing element ${elementIndex + 1}:`, textElement);
-
         // Initialize GSAP SplitText to split the text into words
         const splitText = new SplitText(textElement, {
           type: "words",
@@ -374,8 +347,6 @@ document.addEventListener("DOMContentLoaded", function () {
           console.warn("SplitText elements not found");
           return;
         }
-
-        console.log(`Split into ${splitText.words.length} words`);
 
         // Set initial state of all words - maintaining the 0.5 opacity
         gsap.set(splitText.words, {
@@ -396,10 +367,6 @@ document.addEventListener("DOMContentLoaded", function () {
         const startTrigger = `top ${startValue}%`;
         const endTrigger = `bottom ${endValue}%`;
 
-        console.log(
-          `Setting scroll trigger with start: ${startTrigger}, end: ${endTrigger}`,
-        );
-
         // Create the scroll-triggered animation
         const tl = gsap.timeline({
           scrollTrigger: {
@@ -408,31 +375,11 @@ document.addEventListener("DOMContentLoaded", function () {
             end: endTrigger,
             scrub: 0.5,
             markers: false,
-            onUpdate: (self) => {
-              console.log(
-                `Element ${elementIndex + 1} scroll progress: ${(self.progress * 100).toFixed(1)}%`,
-              );
-            },
-            onEnter: () => {
-              console.log(
-                `Element ${elementIndex + 1}: Animation started (entered trigger zone)`,
-              );
-            },
-            onLeave: () => {
-              console.log(
-                `Element ${elementIndex + 1}: Animation complete (left trigger zone)`,
-              );
-            },
-            onEnterBack: () => {
-              console.log(
-                `Element ${elementIndex + 1}: Re-entered trigger zone (scrolling up)`,
-              );
-            },
-            onLeaveBack: () => {
-              console.log(
-                `Element ${elementIndex + 1}: Left trigger zone backwards`,
-              );
-            },
+            onUpdate: (self) => {},
+            onEnter: () => {},
+            onLeave: () => {},
+            onEnterBack: () => {},
+            onLeaveBack: () => {},
           },
         });
 
@@ -444,8 +391,6 @@ document.addEventListener("DOMContentLoaded", function () {
           ease: "power2.out",
           className: "+=active",
         });
-
-        console.log(`Animation setup complete for element ${elementIndex + 1}`);
       } catch (error) {
         console.warn(
           `Error in text animation setup for element ${elementIndex + 1}:`,
@@ -460,18 +405,15 @@ document.addEventListener("DOMContentLoaded", function () {
   gsap.registerPlugin(ScrollTrigger);
   function sequenceInitialiser() {
     if (window.innerWidth <= 768) {
-      console.log("Tablet/mobile detected - skipping sequence initialization");
+      console.warn("Tablet/mobile detected - skipping sequence initialization");
       return;
     }
 
-    console.log("Initializing all sections...");
     const scrollSection = document.querySelectorAll("[data-stack-section]");
     scrollSection.forEach((section) => {
       const wrapper = section.querySelector("[data-stack-wrap]");
       const list = wrapper.querySelector("[data-stack-list]");
       const items = list.querySelectorAll("[data-stack-card]");
-      console.log("Initializing section:", section);
-      console.log("Found items:", items.length);
       sectionInitialiser(section, items);
     });
   }
@@ -481,22 +423,19 @@ document.addEventListener("DOMContentLoaded", function () {
   window.addEventListener("resize", () => {
     clearTimeout(resizeTimeout);
     resizeTimeout = setTimeout(() => {
-      console.log("Screen resized - reinitializing all ScrollTriggers");
+      console.warn("Screen resized - reinitializing all ScrollTriggers");
       ScrollTrigger.getAll().forEach((trigger) => trigger.kill());
       sequenceInitialiser();
     }, 250);
   });
 
   function sectionInitialiser(section, items) {
-    console.log("Setting up vertical scroll for", items.length, "items");
     const wrapper = section.querySelector("[data-stack-wrap]");
     const dynamicHeight = `${(items.length + 1) * 100}lvh`;
     wrapper.style.height = dynamicHeight;
-    console.log("Set wrapper height to:", dynamicHeight);
     items.forEach((item, index) => {
       if (index !== 0) {
         gsap.set(item, { yPercent: 100 });
-        console.log("Set item", index, "to yPercent: 100");
       }
     });
     const timeline = gsap.timeline({
@@ -513,7 +452,6 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
     items.forEach((item, index) => {
-      console.log("Adding animation for item", index);
       if (index < items.length - 1) {
         timeline.to(item, {
           opacity: 0,
