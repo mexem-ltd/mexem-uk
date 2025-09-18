@@ -119,7 +119,7 @@ document.addEventListener("DOMContentLoaded", () => {
           },
         });
       } catch (error) {
-        console.error(`Motion: Slide animation failed at ${index + 1}:`, error);
+        console.warn(`Motion: Slide animation failed at ${index + 1}:`);
       }
     });
   }
@@ -325,9 +325,7 @@ document.addEventListener("DOMContentLoaded", function () {
   if (typeof SplitText !== "undefined") {
     console.log("SplitText loaded");
   } else {
-    console.error(
-      "SplitText is NOT available - this might still be a premium plugin",
-    );
+    console.error("SplitText is not available");
   }
 
   // Make sure GSAP and plugins are loaded
@@ -354,7 +352,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // Debug: Check if elements exist
     if (!textElements || textElements.length === 0) {
-      console.error("Could not find elements with data-motion-reveal");
+      console.warn("Could not find elements with data-motion-reveal");
       return;
     }
 
@@ -373,10 +371,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
         // Debug: Check if words were created
         if (!splitText.words || splitText.words.length === 0) {
-          console.error(
-            "SplitText did not create any word elements for",
-            textElement,
-          );
+          console.warn("SplitText elements not found");
           return;
         }
 
@@ -452,9 +447,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
         console.log(`Animation setup complete for element ${elementIndex + 1}`);
       } catch (error) {
-        console.error(
+        console.warn(
           `Error in text animation setup for element ${elementIndex + 1}:`,
-          error,
         );
       }
     });

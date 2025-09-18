@@ -19,7 +19,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const cleaned = value.toString().trim().replace(/%/g, "");
     const number = parseFloat(cleaned);
     if (isNaN(number)) {
-      console.error("Invalid percentage value:", value);
+      console.warn("Invalid percentage value:", value);
       return null;
     }
     // Clamp between 0-100
@@ -38,14 +38,14 @@ document.addEventListener("DOMContentLoaded", function () {
       const xStr = marker.getAttribute("data-map-x");
       const yStr = marker.getAttribute("data-map-y");
       if (!xStr || !yStr) {
-        console.error("Missing x,y coordinates for marker:", marker);
+        console.warn("Missing x,y coordinates for marker:", marker);
         return;
       }
       // Parse x,y percentages
       const x = parsePercentage(xStr);
       const y = parsePercentage(yStr);
       if (x === null || y === null) {
-        console.error("Failed to parse x,y coordinates for marker:", marker);
+        console.warn("Failed to parse x,y coordinates for marker:", marker);
         return;
       }
       // Apply CSS positioning directly
@@ -111,7 +111,7 @@ document.addEventListener("DOMContentLoaded", function () {
         const winterMatch = winterTime.match(/UTC([+-]?\d+(?:\.\d+)?)/);
 
         if (!summerMatch || !winterMatch) {
-          console.error(
+          console.warn(
             `Invalid summer/winter timezone format for marker:`,
             zoneStr,
           );
@@ -132,7 +132,7 @@ document.addEventListener("DOMContentLoaded", function () {
         // Single timezone format (e.g., "UTC+5", "UTC-8.5")
         const offsetMatch = zoneStr.match(/UTC([+-]?\d+(?:\.\d+)?)/);
         if (!offsetMatch) {
-          console.error(`Invalid timezone format for marker:`, zoneStr);
+          console.warn(`Invalid timezone format for marker:`, zoneStr);
           timeElement.style.display = "none";
           return;
         }
